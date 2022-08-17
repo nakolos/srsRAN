@@ -165,6 +165,10 @@ uint32_t rlc_um_base::read_pdu(uint8_t* payload, uint32_t nof_bytes)
   }
   return 0;
 }
+void rlc_um_base::reset_sn()
+{
+  tx->reset_sn();
+}
 
 void rlc_um_base::write_pdu(uint8_t* payload, uint32_t nof_bytes)
 {
@@ -242,6 +246,7 @@ void rlc_um_base::rlc_um_base_tx::stop()
   empty_queue();
   reset();
 }
+
 
 void rlc_um_base::rlc_um_base_tx::reestablish()
 {

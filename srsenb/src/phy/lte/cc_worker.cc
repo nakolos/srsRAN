@@ -233,6 +233,7 @@ void cc_worker::work_dl(const srsran_dl_sf_cfg_t&            dl_sf_cfg,
                         stack_interface_phy_lte::ul_sched_t& ul_grants,
                         srsran_mbsfn_cfg_t*                  mbsfn_cfg)
 {
+  Info("work_dl");
   std::lock_guard<std::mutex> lock(mutex);
   dl_sf = dl_sf_cfg;
 

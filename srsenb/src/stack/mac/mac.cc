@@ -860,7 +860,8 @@ int mac::get_mch_sched(uint32_t tti, bool is_mcch, dl_sched_list_t& dl_sched_res
   srsran_dl_fill_ra_mcs(&mcs, 0, cell_config[0].cell.nof_prb, false);
   srsran_dl_fill_ra_mcs(&mcs_data, 0, cell_config[0].cell.nof_prb, false);
   if (is_mcch) {
-    build_mch_sched(mcs_data.tbs);
+      ue_db[SRSRAN_MRNTI]->reset_sn(1);
+    build_mch_sched(mcs_data.tbs); // [kku]
     mch.mcch_payload              = mcch_payload_buffer;
     mch.current_sf_allocation_num = 1;
     logger.info("MCH Sched Info: LCID: %d, Stop: %d, tti is %d ",
@@ -893,6 +894,8 @@ int mac::get_mch_sched(uint32_t tti, bool is_mcch, dl_sched_list_t& dl_sched_res
         break;
       }
     }
+    logger.info("MCH Sched Info: current_sf_alloc_num: %d, Stop: %d",
+        mch.current_sf_allocation_num , mtch_stop);
     if (mch.current_sf_allocation_num <= mtch_stop) {
       int requested_bytes = (mcs_data.tbs / 8 > (int)mch.mtch_sched[mtch_index].lcid_buffer_size)
                                 ? (mch.mtch_sched[mtch_index].lcid_buffer_size)
@@ -900,6 +903,10 @@ int mac::get_mch_sched(uint32_t tti, bool is_mcch, dl_sched_list_t& dl_sched_res
       int bytes_received = ue_db[SRSRAN_MRNTI]->read_pdu(current_lcid, mtch_payload_buffer, requested_bytes);
       mch.pdu[0].lcid    = current_lcid;
       mch.pdu[0].nbytes  = bytes_received;
+    logger.info("MCH Sched Info: LCID: %d, Stop: %d, tti is %d, bytes recvd %d ",
+                mch.mtch_sched[mtch_index].lcid,
+                mtch_stop,
+                tti, bytes_received);
       mch.mtch_sched[0].mtch_payload  = mtch_payload_buffer;
       dl_sched_res->pdsch[0].dci.rnti = SRSRAN_MRNTI;
       if (bytes_received) {

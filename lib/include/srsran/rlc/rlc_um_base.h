@@ -55,6 +55,7 @@ public:
   void stop();
   void empty_queue();
   bool is_mrb();
+    void             reset_sn();
 
   rlc_mode_t get_mode();
   uint32_t   get_lcid() final;
@@ -98,6 +99,7 @@ protected:
     void             reset_metrics();
     bool             has_data();
     virtual uint32_t get_buffer_state() = 0;
+    void             reset_sn() { reset(); }
 
     void set_bsr_callback(bsr_callback_t callback);
 

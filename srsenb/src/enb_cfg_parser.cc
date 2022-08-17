@@ -92,7 +92,7 @@ int field_sched_info::parse(libconfig::Setting& root)
       if (data->sched_info_list[i].sib_map_info.size() < ASN1_RRC_MAX_SIB) {
         for (uint32_t j = 0; j < data->sched_info_list[i].sib_map_info.size(); j++) {
           uint32_t sib_index = root[i]["si_mapping_info"][j];
-          if (sib_index >= 3 && sib_index <= 13) {
+          if (sib_index >= 3 && sib_index <= 16) {
             data->sched_info_list[i].sib_map_info[j].value = (sib_type_e::options)(sib_index - 3);
           } else {
             fprintf(stderr, "Invalid SIB index %d for si_mapping_info=%d in sched_info=%d\n", sib_index, j, i);
@@ -1604,8 +1604,8 @@ int set_derived_args(all_args_t* args_, rrc_cfg_t* rrc_cfg_, phy_cfg_t* phy_cfg_
   }
 
   if (args_->enb.transmission_mode == 1) {
-    phy_cfg_->pdsch_cnfg.p_b                                    = 0; // Default TM1
-    rrc_cfg_->sibs[1].sib2().rr_cfg_common.pdsch_cfg_common.p_b = 0;
+    phy_cfg_->pdsch_cnfg.p_b                                    = 1; // Default TM1
+    rrc_cfg_->sibs[1].sib2().rr_cfg_common.pdsch_cfg_common.p_b = 1;
   } else {
     phy_cfg_->pdsch_cnfg.p_b                                    = 1; // Default TM2,3,4
     rrc_cfg_->sibs[1].sib2().rr_cfg_common.pdsch_cfg_common.p_b = 1;
@@ -2207,6 +2207,17 @@ int parse_sib9(std::string filename, sib_type9_s* data)
   }
 }
 
+int parse_sib15(std::string filename, sib_type15_r11_s* data)
+{
+  parser::section sib15("sib15");
+  data->mbms_sai_intra_freq_r11_present = true;
+  data->mbms_sai_intra_freq_r11.resize(4);
+  data->mbms_sai_intra_freq_r11[0] = 0;
+  data->mbms_sai_intra_freq_r11[1] = 1;
+  data->mbms_sai_intra_freq_r11[2] = 3;
+  data->mbms_sai_intra_freq_r11[3] = 4;
+  return 0;
+}
 int parse_sib13(std::string filename, sib_type13_r9_s* data)
 {
   parser::section sib13("sib13");
@@ -2239,6 +2250,8 @@ int parse_sibs(all_args_t* args_, rrc_cfg_t* rrc_cfg_, srsenb::phy_cfg_t* phy_co
   sib_type7_s*     sib7  = &rrc_cfg_->sibs[6].set_sib7();
   sib_type9_s*     sib9  = &rrc_cfg_->sibs[8].set_sib9();
   sib_type13_r9_s* sib13 = &rrc_cfg_->sibs[12].set_sib13_v920();
+  sib_type15_r11_s* sib15 = &rrc_cfg_->sibs[14].set_sib15_v1130();
+  sib_type16_r11_s* sib16 = &rrc_cfg_->sibs[15].set_sib16_v1130();
 
   sib_type1_s* sib1 = &rrc_cfg_->sib1;
   if (sib_sections::parse_sib1(args_->enb_files.sib_config, sib1) != SRSRAN_SUCCESS) {
@@ -2321,6 +2334,11 @@ int parse_sibs(all_args_t* args_, rrc_cfg_t* rrc_cfg_, srsenb::phy_cfg_t* phy_co
 
   if (sib_is_present(sib1->sched_info_list, sib_type_e::sib_type13_v920)) {
     if (sib_sections::parse_sib13(args_->enb_files.sib_config, sib13) != SRSRAN_SUCCESS) {
+      return SRSRAN_ERROR;
+    }
+  }
+  if (sib_is_present(sib1->sched_info_list, sib_type_e::sib_type15_v1130)) {
+    if (sib_sections::parse_sib15(args_->enb_files.sib_config, sib15) != SRSRAN_SUCCESS) {
       return SRSRAN_ERROR;
     }
   }

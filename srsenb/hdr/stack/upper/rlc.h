@@ -75,6 +75,7 @@ public:
   // rlc_interface_mac
   int  read_pdu(uint16_t rnti, uint32_t lcid, uint8_t* payload, uint32_t nof_bytes);
   void write_pdu(uint16_t rnti, uint32_t lcid, uint8_t* payload, uint32_t nof_bytes);
+  void reset_sn(uint16_t rnti, uint32_t lcid);
 
 private:
   class user_interface : public srsue::pdcp_interface_rlc, public srsue::rrc_interface_rlc

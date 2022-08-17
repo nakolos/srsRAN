@@ -297,6 +297,9 @@ uint32_t rlc::read_pdu(uint32_t lcid, uint8_t* payload, uint32_t nof_bytes)
   return ret;
 }
 
+void rlc::reset_sn_mch(uint32_t lcid) {
+  rlc_array_mrb.at(lcid)->reset_sn();
+}
 uint32_t rlc::read_pdu_mch(uint32_t lcid, uint8_t* payload, uint32_t nof_bytes)
 {
   uint32_t ret = 0;

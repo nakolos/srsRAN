@@ -78,7 +78,7 @@ int srsran_enb_dl_init(srsran_enb_dl_t* q, cf_t* out_buffer[SRSRAN_MAX_PORTS], u
       ERROR("Error creating PHICH object");
       goto clean_exit;
     }
-    int mbsfn_area_id = 1;
+    int mbsfn_area_id = 0;
 
     if (srsran_pmch_init(&q->pmch, max_prb, 1)) {
       ERROR("Error creating PMCH object");
@@ -216,7 +216,7 @@ int srsran_enb_dl_set_cell(srsran_enb_dl_t* q, srsran_cell_t cell)
         ERROR("Error initializing CSR signal (%d)", ret);
         return SRSRAN_ERROR;
       }
-      int mbsfn_area_id = 1;
+      int mbsfn_area_id = 0;
       if (srsran_refsignal_mbsfn_set_cell(&q->mbsfnr_signal, q->cell, mbsfn_area_id)) {
         ERROR("Error initializing MBSFNR signal (%d)", ret);
         return SRSRAN_ERROR;

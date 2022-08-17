@@ -48,6 +48,7 @@ public:
   void stop() override;
   void reestablish() override;
   void empty_queue() override;
+    void             reset_sn() override {};
 
   rlc_mode_t get_mode() override;
   uint32_t   get_lcid() override;

@@ -202,6 +202,12 @@ void rlc::update_bsr(uint32_t rnti, uint32_t lcid, uint32_t tx_queue, uint32_t p
   mac->rlc_buffer_state(rnti, lcid, tx_queue, prio_tx_queue);
 }
 
+void rlc::reset_sn(uint16_t rnti, uint32_t lcid)
+{
+  pthread_rwlock_rdlock(&rwlock);
+  users[rnti].rlc->reset_sn_mch(lcid);
+  pthread_rwlock_unlock(&rwlock);
+}
 int rlc::read_pdu(uint16_t rnti, uint32_t lcid, uint8_t* payload, uint32_t nof_bytes)
 {
   int ret;
@@ -253,6 +259,7 @@ void rlc::discard_sdu(uint16_t rnti, uint32_t lcid, uint32_t discard_sn)
 
 bool rlc::rb_is_um(uint16_t rnti, uint32_t lcid)
 {
+  return true;
   bool ret = false;
   pthread_rwlock_rdlock(&rwlock);
   if (users.count(rnti)) {

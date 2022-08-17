@@ -30,6 +30,7 @@ class rlc_dummy : public rlc_interface_mac
 {
   int  read_pdu(uint16_t rnti, uint32_t lcid, uint8_t* payload, uint32_t nof_bytes) { return SRSRAN_SUCCESS; }
   void write_pdu(uint16_t rnti, uint32_t lcid, uint8_t* payload, uint32_t nof_bytes) {}
+  void reset_sn(uint16_t rnti, uint32_t lcid) {}
 };
 
 } // namespace srsenb

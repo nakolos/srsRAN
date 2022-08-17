@@ -220,6 +220,7 @@ public:
   virtual void stop()                              = 0;
   virtual void reestablish()                       = 0;
   virtual void empty_queue()                       = 0;
+    virtual void             reset_sn() = 0;
 
   bool suspend()
   {

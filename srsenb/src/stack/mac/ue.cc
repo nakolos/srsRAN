@@ -465,6 +465,11 @@ uint32_t ue::read_pdu(uint32_t lcid, uint8_t* payload, uint32_t requested_bytes)
   return rlc->read_pdu(rnti, lcid, payload, requested_bytes);
 }
 
+void ue::reset_sn(uint32_t lcid)
+{
+  return rlc->reset_sn(rnti, lcid);
+}
+
 void ue::allocate_sdu(srsran::sch_pdu* pdu, uint32_t lcid, uint32_t total_sdu_len)
 {
   const int min_sdu_len = lcid == 0 ? 1 : 2;

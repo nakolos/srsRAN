@@ -189,7 +189,7 @@ void pdcp_entity_lte::write_sdu(unique_byte_buffer_t sdu, int upper_sn)
     enable_security_tx_sn = -1;
   }
 
-  write_data_header(sdu, tx_count);
+  //write_data_header(sdu, tx_count);
 
   // Append MAC (SRBs only)
   uint8_t mac[4]       = {};

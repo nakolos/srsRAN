@@ -79,6 +79,7 @@ public:
   rlc_mode_t get_mode() final { return rlc_mode_t::am; }
 
   uint32_t get_lcid() final { return lcid; }
+    void             reset_sn() override {};
 
   /****************************************************************************
    * PDCP interface

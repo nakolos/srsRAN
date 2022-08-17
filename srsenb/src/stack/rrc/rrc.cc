@@ -931,7 +931,7 @@ void rrc::configure_mbsfn_sibs()
   // pack MCCH for transmission and pass relevant MCCH values to PHY/MAC
   pack_mcch();
   srsran::mcch_msg_t mcch_t;
-  mcch_t.common_sf_alloc_period         = srsran::mcch_msg_t::common_sf_alloc_period_t::rf64;
+  mcch_t.common_sf_alloc_period         = srsran::mcch_msg_t::common_sf_alloc_period_t::rf32;
   mcch_t.nof_common_sf_alloc            = 1;
   srsran::mbsfn_sf_cfg_t sf_alloc_item  = mcch_t.common_sf_alloc[0];
   sf_alloc_item.radioframe_alloc_offset = 0;
@@ -952,8 +952,8 @@ void rrc::configure_mbsfn_sibs()
   }
   logger.debug("PMCH data MCS=%d", mbms_mcs);
   pmch_item->data_mcs         = mbms_mcs;
-  pmch_item->mch_sched_period = srsran::pmch_info_t::mch_sched_period_t::rf64;
-  pmch_item->sf_alloc_end     = 64 * 6;
+  pmch_item->mch_sched_period = srsran::pmch_info_t::mch_sched_period_t::rf32;
+  pmch_item->sf_alloc_end     = (32 * 6) - 1;
 
   // Configure PHY when PHY is done being initialized
   task_sched.defer_task([this, sibs2, sibs13, mcch_t]() mutable {
@@ -966,7 +966,7 @@ int rrc::pack_mcch()
 {
   mcch.msg.set_c1();
   mbsfn_area_cfg_r9_s& area_cfg_r9      = mcch.msg.c1().mbsfn_area_cfg_r9();
-  area_cfg_r9.common_sf_alloc_period_r9 = mbsfn_area_cfg_r9_s::common_sf_alloc_period_r9_e_::rf64;
+  area_cfg_r9.common_sf_alloc_period_r9 = mbsfn_area_cfg_r9_s::common_sf_alloc_period_r9_e_::rf32;
   area_cfg_r9.common_sf_alloc_r9.resize(1);
   mbsfn_sf_cfg_s* sf_alloc_item          = &area_cfg_r9.common_sf_alloc_r9[0];
   sf_alloc_item->radioframe_alloc_offset = 0;
@@ -982,9 +982,9 @@ int rrc::pack_mcch()
   pmch_item->mbms_session_info_list_r9[0].session_id_r9[0]      = 0;
   pmch_item->mbms_session_info_list_r9[0].tmgi_r9.plmn_id_r9.set_explicit_value_r9();
   srsran::plmn_id_t plmn_obj;
-  plmn_obj.from_string("00003");
+  plmn_obj.from_string("90156");
   srsran::to_asn1(&pmch_item->mbms_session_info_list_r9[0].tmgi_r9.plmn_id_r9.explicit_value_r9(), plmn_obj);
-  uint8_t byte[] = {0x0, 0x0, 0x0};
+  uint8_t byte[] = {0x0, 0x0, 0x10};
   memcpy(&pmch_item->mbms_session_info_list_r9[0].tmgi_r9.service_id_r9[0], &byte[0], 3);
 
   if (pmch_item->mbms_session_info_list_r9.size() > 1) {
@@ -1007,8 +1007,8 @@ int rrc::pack_mcch()
 
   logger.debug("PMCH data MCS=%d", mbms_mcs);
   pmch_item->pmch_cfg_r9.data_mcs_r9         = mbms_mcs;
-  pmch_item->pmch_cfg_r9.mch_sched_period_r9 = pmch_cfg_r9_s::mch_sched_period_r9_e_::rf64;
-  pmch_item->pmch_cfg_r9.sf_alloc_end_r9     = 64 * 6;
+  pmch_item->pmch_cfg_r9.mch_sched_period_r9 = pmch_cfg_r9_s::mch_sched_period_r9_e_::rf32;
+  pmch_item->pmch_cfg_r9.sf_alloc_end_r9     = (32 * 6) - 1;
 
   const int     rlc_header_len = 1;
   asn1::bit_ref bref(&mcch_payload_buffer[rlc_header_len], sizeof(mcch_payload_buffer) - rlc_header_len);

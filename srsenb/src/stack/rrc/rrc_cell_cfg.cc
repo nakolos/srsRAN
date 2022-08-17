@@ -48,10 +48,18 @@ enb_cell_common_list::enb_cell_common_list(const rrc_cfg_t& cfg_) : cfg(cfg_)
     new_cell->sib1 = cfg.sib1;
     // Update cellId
     sib_type1_s::cell_access_related_info_s_* cell_access = &new_cell->sib1.cell_access_related_info;
-    cell_access->cell_id.from_number((cfg.enb_id << 8u) + new_cell->cell_cfg.cell_id);
-    cell_access->tac.from_number(new_cell->cell_cfg.tac);
+    //cell_access->cell_id.from_number((cfg.enb_id << 8u) + new_cell->cell_cfg.cell_id);
+    //cell_access->tac.from_number(new_cell->cell_cfg.tac);
+    cell_access->cell_id.from_number(0);
+    cell_access->tac.from_number(0);
     // Update DL EARFCN
-    new_cell->sib1.freq_band_ind = (uint8_t)srsran_band_get_band(new_cell->cell_cfg.dl_earfcn);
+    new_cell->sib1.freq_band_ind = 64;//(uint8_t)srsran_band_get_band(new_cell->cell_cfg.dl_earfcn);
+    new_cell->sib1.non_crit_ext_present = true;
+    new_cell->sib1.non_crit_ext.late_non_crit_ext_present = true;
+    new_cell->sib1.non_crit_ext.late_non_crit_ext.resize(2);// = "6030";
+    new_cell->sib1.non_crit_ext.late_non_crit_ext[0] = 0x60;
+    new_cell->sib1.non_crit_ext.late_non_crit_ext[1] = 0x30;
+
 
     // Set Cell SIB2
     // update PRACH root seq index for this cell
@@ -59,7 +67,7 @@ enb_cell_common_list::enb_cell_common_list(const rrc_cfg_t& cfg_) : cfg(cfg_)
     new_cell->sib2.rr_cfg_common.prach_cfg.root_seq_idx = new_cell->cell_cfg.root_seq_idx;
     // update carrier freq
     if (new_cell->sib2.freq_info.ul_carrier_freq_present) {
-      new_cell->sib2.freq_info.ul_carrier_freq = new_cell->cell_cfg.ul_earfcn;
+      new_cell->sib2.freq_info.ul_carrier_freq = 65535;//new_cell->cell_cfg.ul_earfcn;
     }
   }
 

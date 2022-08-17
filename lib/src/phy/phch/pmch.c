@@ -375,7 +375,7 @@ int srsran_pmch_decode(srsran_pmch_t*         q,
 }
 void srsran_configure_pmch(srsran_pmch_cfg_t* pmch_cfg, srsran_cell_t* cell, srsran_mbsfn_cfg_t* mbsfn_cfg)
 {
-  pmch_cfg->area_id                       = 1;
+  pmch_cfg->area_id                       = mbsfn_cfg->mbsfn_area_id;
   pmch_cfg->pdsch_cfg.rnti                = SRSRAN_MRNTI;
   pmch_cfg->pdsch_cfg.grant.nof_layers    = 1;
   pmch_cfg->pdsch_cfg.grant.nof_prb       = cell->nof_prb;
