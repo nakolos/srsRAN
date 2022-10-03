@@ -860,7 +860,7 @@ int mac::get_mch_sched(uint32_t tti, bool is_mcch, dl_sched_list_t& dl_sched_res
   srsran_dl_fill_ra_mcs(&mcs, 0, cell_config[0].cell.nof_prb, false);
   srsran_dl_fill_ra_mcs(&mcs_data, 0, cell_config[0].cell.nof_prb, false);
   if (is_mcch) {
-      ue_db[SRSRAN_MRNTI]->reset_sn(1);
+  //    ue_db[SRSRAN_MRNTI]->reset_sn(1);
     build_mch_sched(mcs_data.tbs); // [kku]
     mch.mcch_payload              = mcch_payload_buffer;
     mch.current_sf_allocation_num = 1;
