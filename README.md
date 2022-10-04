@@ -1,8 +1,9 @@
-# Table of content
+# Table of contents
 
 1. Installation
 2. Configuration file
 3. Running the transmitter
+4. Sending data
 
 ## Step 1: Installation
 ### 1.1 Getting the source code
@@ -49,7 +50,6 @@ Starting the transmitter requires the follwing 3 steps:
 1. Starting the MBMS-Gateway
 2. Starting the EPC
 3. Starting the ENB
-4. Sending data
 
 ### 1. Starting the MBMS-Gateway
 ``
@@ -79,7 +79,7 @@ sudo srsenb/src/srsenb
 
 After that the transmitter is running. 
 
-### 4. Sending data
+## Step 4: Sending data
 The transmitter is running and is ready to receive a multicast stream. Now you can, for example, transcode a local .mp4 file to rtp with ffmpeg:
 
 ``
