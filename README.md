@@ -3,6 +3,7 @@
 1. Installation
 2. Configuration file
 3. Running the transmitter
+4. Sending data
 
 ## Step 1: Installation
 ### 1.1 Getting the source code
