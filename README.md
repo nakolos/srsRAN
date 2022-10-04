@@ -1,24 +1,87 @@
-srsRAN
-======
+# Table of content
 
-[![Build Status](https://app.travis-ci.com/srsran/srsRAN.svg?branch=master)](https://app.travis-ci.com/github/srsran/srsRAN)
-[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/srsran/srsRAN.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/srsran/srsRAN/context:cpp)
-[![Coverity](https://scan.coverity.com/projects/23045/badge.svg)](https://scan.coverity.com/projects/srsran)
+1. Installation
+2. Configuration file
+3. Running the transmitter
 
-srsRAN is a 4G/5G software radio suite developed by [SRS](http://www.srs.io).
+## Step 1: Installation
+### 1.1 Getting the source code
+````
+git clone --recurse-submodules -b qrd-tx https://github.com/nakolos/srsRAN.git
 
-See the [srsRAN project pages](https://www.srsran.com) for information, guides and project news.
+cd srsRAN/
 
-The srsRAN suite includes:
-  * srsUE - a full-stack SDR 4G/5G UE application
-  * srsENB - a full-stack SDR 4G/5G e(g)NodeB application
-  * srsEPC - a light-weight 4G core network implementation with MME, HSS and S/P-GW
+git submodule update
 
-For application features, build instructions and user guides see the [srsRAN documentation](https://docs.srsran.com).
+mkdir build && cd build
+````
 
-For license details, see LICENSE file.
+### 1.2 Build setup
+``
+cmake -DCMAKE_INSTALL_PREFIX=/usr -GNinja ..
+``
 
-Support
-=======
+### 1.3 Building
+``
+ninja
+``
 
-Mailing list: https://lists.srsran.com/mailman/listinfo/srsran-users
+### 1.4 Installing
+``
+sudo ninja install
+``
+
+### 1.5 Install configs
+``
+sudo ./srsran_install_configs.sh
+``
+
+## Step 2: Adjust configuration file
+After the installtion, you have to adjust the enb config file for your desired frequency, bandwith, tx gain, ...
+
+Edit it by typing:
+``
+sudo vi /root/.config/srsran/enb.conf
+``
+
+## Step 3: Run the transmitter
+Starting the transmitter requires the follwing 3 steps:
+1. Starting the MBMS-Gateway
+2. Starting the EPC
+3. Starting the ENB
+4. Sending data
+
+### 1. Starting the MBMS-Gateway
+``
+sudo srsmbms
+``
+
+The MBMS-GW receives multicast packets on one tunnel interface, packages them to GTP-U-Packets and sends them to ENB over another tunnel interface.
+The command above creates the sgi_mb interface (you could see it by entering ``ifconfig`` for example). In order for the incoming data to be routed correctly, a route has to be added:
+
+``
+sudo route add -net 239.11.4.0 netmask 255.255.255.0 dev sgi_mb
+``
+
+You can use any multicast route. 
+
+### 2. Start the EPC
+``
+sudo srsepc
+``
+
+### 3. Start the ENB
+````
+cd srsRAN/build
+
+sudo srsenb/src/srsenb
+````
+
+After that the transmitter is running. 
+
+### 4. Sending data
+The transmitter is running and is ready to receive a multicast stream. Now you can, for example, transcode a local .mp4 file to rtp with ffmpeg:
+
+``
+ffmpeg -stream_loop -1 -re -i <Input-file> -vcodec copy -an -f rtp_mpegts udp://239.11.4.50:9988
+``
