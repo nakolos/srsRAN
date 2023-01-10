@@ -105,7 +105,7 @@ Starting the transmitter requires the follwing 3 steps:
 2. Starting the EPC
 3. Starting the ENB
 
-### 1. Starting the MBMS-Gateway
+### 4.1 Starting the MBMS-Gateway
 ``
 sudo srsmbms
 ``
@@ -119,12 +119,12 @@ sudo route add -net 239.11.4.0 netmask 255.255.255.0 dev sgi_mb
 
 You can use any multicast route. 
 
-### 2. Start the EPC
+### 4.2 Start the EPC
 ``
 sudo srsepc
 ``
 
-### 3. Start the ENB
+### 4.3 Start the ENB
 ````
 cd srsRAN/build
 
