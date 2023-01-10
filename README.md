@@ -1,9 +1,10 @@
 # Table of contents
 
-1. Installation
-2. Configuration file
-3. Running the transmitter
-4. Sending data
+1. Install dependencies
+2. Install SDR drivers
+3. Build the transmitter
+4. Run the transmitter
+5. Send data
 
 ## Step 1: Install Dependencies
 
@@ -86,12 +87,19 @@ sudo ninja install
 sudo ./srsran_install_configs.sh user
 ``
 
-## Step 4: Adjust configuration files
-After the installtion, you have to adjust the enb config file for your desired frequency, bandwith, tx gain, ...
+### 3.6: Adjust configuration files
+After the installtion, you have to adjust the enb, rr, epc config files to your desired frequency, bandwith, tx gain, MNC, MCC ...
 
-You can use our template of the enb.conf, 
+or you can use our [templates](https://github.com/nakolos/srsRAN/tree/qrd-tx/Config-Template). Download them and place them in ``/root/.config/srsran/``.
+You can still change the frequency, gain or whatever if you want to. 
 
-## Step 3: Run the transmitter
+Also make sure to copy the adapted sib.conf.mbsfn file to the build directory:
+````
+cd srsRAN/
+cp sib.conf.mbsfn build/sib.conf.mbsfn
+````
+
+## Step 4: Run the transmitter
 Starting the transmitter requires the follwing 3 steps:
 1. Starting the MBMS-Gateway
 2. Starting the EPC
@@ -125,7 +133,7 @@ sudo srsenb/src/srsenb
 
 After that the transmitter is running. 
 
-## Step 4: Sending data
+## Step 5: Sending data
 The transmitter is running and is ready to receive a multicast stream. Now you can, for example, transcode a local .mp4 file to rtp with ffmpeg:
 
 ``
