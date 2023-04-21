@@ -90,7 +90,12 @@ sudo ./srsran_install_configs.sh user
 ### 3.6: Adjust configuration files
 After the installtion, you have to adjust the enb, rr, epc config files to your desired frequency, bandwith, tx gain, MNC, MCC ...
 
-or you can use our [templates](https://github.com/nakolos/srsRAN/tree/qrd-tx/Config-Template). Download them and place them in ``/root/.config/srsran/``.
+Alternatively, you can use our Config-templates:
+````
+cd srsRAN/
+sudo cp Config-Template/* /root/.config/srsran/
+````
+
 You can still change the frequency, gain or whatever if you want to. 
 
 Also make sure to copy the adapted sib.conf.mbsfn file to the build directory:
