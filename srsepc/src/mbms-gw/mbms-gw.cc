@@ -209,8 +209,8 @@ int mbms_gw::init_m1_u(mbms_gw_args_t* args)
   }
   m_m1u_up = true;
 
-  /* set no loopback */
-  char loopch = 0;
+  /* set loopback */
+  char loopch = 1;
   if (setsockopt(m_m1u, IPPROTO_IP, IP_MULTICAST_LOOP, (char*)&loopch, sizeof(char)) < 0) {
     m_logger.error("Failed to disable loopback: %s", strerror(errno));
     return SRSRAN_ERROR_CANT_START;
